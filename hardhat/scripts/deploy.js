@@ -11,7 +11,7 @@ async function main() {
   // url of the metadata folder on ipfs
   const metadataURL = "ipfs://QmaLk1AcD6oBLFEiUYpcHfCkh4wr4CFUZvUYX4jvpE1YBq";
 
-  const robotNftContract = await hre.ethers.deployContract("RobotNfts", [
+  const robotNftContract = await hre.ethers.deployContract("RobotNFTs", [
     metadataURL
   ]);
 
