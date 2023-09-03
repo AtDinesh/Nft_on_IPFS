@@ -63,5 +63,29 @@ export default function Home() {
     }
   };
 
-  
+  const connectWallet = async () => {
+    try {
+      // Get Provider (metamask)
+      await getProviderOrSigner(false);
+      setWalletConnected(true);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Get the number of token minted in the contract
+  const getTokenMintedCount = async () => {
+    try {
+      // Get the provider (metamask)
+      const provider = await getProviderOrSigner(false);
+      // connect to the contract
+      const nftContract = new Contract(NFT_CONTRACT_ADDRESS, abi, provider);
+      // call tokenIds() function of the contract
+      const _tokenIds = await nftContract.tokenIds();
+      console.log("Number of NFT minted so far: ", _tokenIds);
+      setTokenIdsMinted(_tokenIds.toString());
+    } catch (err) {
+      console.error(err);
+    }
+  };
 }
