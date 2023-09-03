@@ -10,6 +10,8 @@ contract RobotNFTs is ERC721Enumerable, Ownable {
     /**
     * @dev baseTokenURI for computing {tokenURI}. If set, the resulting URI for each
     * token will be the concatenation of the `baseURI` and the `tokenId`.
+    * base URI is a prefix that, when combined with the tokenId and a file extension (ex: ".json"), 
+    * forms the complete URI pointing to the metadata JSON file associated with the token.
     */
     string baseTokenUri;
 
@@ -25,6 +27,51 @@ contract RobotNFTs is ERC721Enumerable, Ownable {
     // total number of nfts minted
     uint256 public tokenIds;
 
+    constructor (string memory _baseURI) ERC721("RobotNFTs", "RBT") {
+        baseTokenUri = _baseUri;
+    }
 
+    /**
+    * @dev _baseURI overrides the Openzeppelin's ERC721 default implementation which
+    * returned an empty string for the baseURI
+    */
+    function _baseURI() internal view virtual override returns (string memory) {
+        return baseTokenUri;
+    }
 
+    /**
+    * @dev tokenURI overrides the Openzeppelin's ERC721 implementation.
+    * This function returns the URI from where we can extract the metadata for a given tokenId
+    */
+    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+        // _exists is inherited from ERC721 to verify the token's existence.
+        require(_exists(tokenId), "ERC721URIStorage: URI query for nonexistent token");
+
+        string memory baseUri = _baseURI();
+
+        // If the length of baseUri > 0, then return baseURI + tokenId and the .json
+        // so that it knows the location of the metadata file.
+        // If baseUri is empty then return an empty string
+        return bytes(baseUri).length > 0 ? string(abi.encodedPacked(baseUri, tokenId.toString(), ".json")) : "";
+    }   
+
+    /**
+    * @dev setPaused makes the contract paused or unpaused
+    */
+    function setPaused(bool _paused) public onlyOwner {
+        paused = _paused;
+    }
+
+    /**
+    * @dev withdraw sends all the ether in the contract
+    * to the owner of the contract
+    */
+    function withdraw() public onlyOwner {
+        payable(msg.sender).transfer(address(this).balance);
+    }
+
+    // Function to receive Ether
+    receive() external payable {}
+    // Fallback function called when msg.data is not empty
+    fallback() external payable {}
 }
