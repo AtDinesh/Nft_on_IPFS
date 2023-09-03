@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/token/ERC721/extensioons/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
@@ -16,7 +16,7 @@ contract RobotNFTs is ERC721Enumerable, Ownable {
     string baseTokenUri;
 
     // price of each NFT
-    uint256 public price = 0.01 ether;
+    uint256 public price = 0.005 ether;
 
     // pause the contract in case of emergency
     bool public paused;
@@ -27,8 +27,8 @@ contract RobotNFTs is ERC721Enumerable, Ownable {
     // total number of nfts minted
     uint256 public tokenIds;
 
-    constructor (string memory _baseURI) ERC721("RobotNFTs", "RBT") {
-        baseTokenUri = _baseUri;
+    constructor (string memory baseURI) ERC721("RobotNFTs", "RBT") {
+        baseTokenUri = baseURI;
     }
 
     /**
@@ -52,7 +52,7 @@ contract RobotNFTs is ERC721Enumerable, Ownable {
         // If the length of baseUri > 0, then return baseURI + tokenId and the .json
         // so that it knows the location of the metadata file.
         // If baseUri is empty then return an empty string
-        return bytes(baseUri).length > 0 ? string(abi.encodedPacked(baseUri, tokenId.toString(), ".json")) : "";
+        return bytes(baseUri).length > 0 ? string(abi.encodePacked(baseUri, tokenId.toString(), ".json")) : "";
     }   
 
     /**
