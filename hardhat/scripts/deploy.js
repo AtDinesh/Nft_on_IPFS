@@ -5,24 +5,18 @@
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
 const hre = require("hardhat");
+require("dotenv").config({ path: ".env" });
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
+  // url of the metadata folder on ipfs
+  const metadataURL = "ipfs://QmaLk1AcD6oBLFEiUYpcHfCkh4wr4CFUZvUYX4jvpE1YBq";
 
-  const lockedAmount = hre.ethers.parseEther("0.001");
+  const robotNftContract = await hre.ethers.deployContract("RobotNfts", [
+    metadataURL
+  ]);
 
-  const lock = await hre.ethers.deployContract("Lock", [unlockTime], {
-    value: lockedAmount,
-  });
-
-  await lock.waitForDeployment();
-
-  console.log(
-    `Lock with ${ethers.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
-  );
+  await robotNftContract.waitForDeployment();
+  console.log("RobotNfts contract address:", robotNftContract.target);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
