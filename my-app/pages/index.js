@@ -48,14 +48,20 @@ export default function Home() {
     try {
       console.log("Public Mint");
       // Minting requires writing a transaction --> need a signer
-      
+      const signer = await getProviderOrSigner(true);
       // Create an instance of the contract with the signer
-
+      const nftContract = new Contract(NFT_CONTRACT_ADDRESS, abi, signer);
       // Call the mint function from the contract
-
+      const tx = await nftContract.mint({ value: utils.parseEther("0.005") });
       // Wait for transaction to be mined.
+      setLoading(true);
+      await tx.wait();
+      setLoading(false);
+      window.alert("RobotNFT minted !")
     } catch (err) {
       console.error(err);
     }
   };
+
+  
 }
