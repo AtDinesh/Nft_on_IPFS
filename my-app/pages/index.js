@@ -136,5 +136,31 @@ export default function Home() {
     );
   };
 
-  
+  return (
+    <div>
+      <Head>
+        <title>RobotNFTs</title>
+        <meta name="description" content="RobotNFTs-Dapp" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <div className={styles.main}>
+        <div>
+          <h1 className={styles.title}>Welcome to RobotNFTs!</h1>
+          <div className={styles.description}>
+            {/* Using HTML Entities for the apostrophe */}
+            It&#39;s a simple NFT collection using IPFS.
+          </div>
+          <div className={styles.description}>
+            {tokenIdsMinted}/9 have been minted
+          </div>
+          {renderButton()}
+        </div>
+        <div>
+          <img className={styles.image} src="./RobotNFTs/1.gif" />
+        </div>
+      </div>
+
+      <footer className={styles.footer}>Learning content</footer>
+    </div>
+  );
 }
