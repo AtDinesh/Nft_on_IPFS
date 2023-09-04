@@ -88,4 +88,53 @@ export default function Home() {
       console.error(err);
     }
   };
+
+  // useEffects are used to react to changes in state of the website
+  useEffect(() => {
+    // IF wallet is not connected, create instance of web3modal and connect metamask
+    if (!walletConnected) {
+      web3ModalRef.current = new Web3Modal({
+        network: "sepolia",
+        providerOptions: {},
+        disableInjectedProvider: false,
+      });
+
+      connectWallet();
+      getTokenMintedCount(); // initialize the count of number of tokens minted
+
+      // regularly fetch this count to update display
+      setInterval( async function () {
+        await getTokenMintedCount();
+      }, 5 * 1000);
+    }
+  }, [walletConnected]);
+
+  // render a button based on the state of the app
+  const renderButton = () => {
+    // If wallet is not connected, display connectWallet button
+    if (!walletConnected) {
+      return (
+        <button onClick={connectWallet} className={styles.button}>
+          Connect your wallet.
+        </button>
+      );
+    }
+
+    if (loading) {
+      return (
+        <button className={styles.button}>
+          Loading...
+        </button>
+      );
+    }
+
+    // Otherwise give ability to mint NFT
+    return (
+      <button onClick={publicMint} className={styles.button}>
+        Mint an NFT 🤖
+      </button>
+    );
+  };
+
+  
 }
