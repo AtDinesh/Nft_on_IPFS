@@ -27,8 +27,24 @@ contract RobotNFTs is ERC721Enumerable, Ownable {
     // total number of nfts minted
     uint256 public tokenIds;
 
+    // Modifier to let function work only when contract is not paused
+    modifier onlyWhenNotPaused() {
+        require(!paused, "Contract is paused");
+        _;
+    }
+
     constructor (string memory baseURI) ERC721("RobotNFTs", "RBT") {
         baseTokenUri = baseURI;
+    }
+
+    /**
+    * @dev mint allows an user to mint 1 NFT per transaction.
+    */
+    function mint() public payable onlyWhenNotPaused {
+        require(tokenIds < maxTokenIds, "Maximum number of NFTs reached");
+        require(price <= msg.value, "Please send enough ETH");
+        _safeMint(msg.sender, tokenIds);
+        tokenIds++;
     }
 
     /**
