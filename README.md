@@ -1,4 +1,4 @@
-# NFTOnIPDS
+# NFT_On_IPFS
 
 The objective of this dApp is to build an NFT collection while the images and the metadata are stored on IPFS.
 Furthermore, a front-end is also created to allow users to connect to the dApp and mint an NFT.
